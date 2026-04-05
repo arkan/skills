@@ -98,6 +98,18 @@ These skills help you write, refactor, and fix code.
   npx skills@latest add arkan/skills/write-a-skill
   ```
 
+- **blog-post-creator** — Write and iterate on blog posts from idea to publishable draft, with a configurable storage directory.
+
+  ```
+  npx skills@latest add arkan/skills/blog-post-creator
+  ```
+
+  Configure the posts directory in your project's `CLAUDE.md`:
+
+  ```md
+  Posts are stored in Resources/Posts/.
+  ```
+
 - **edit-article** — Edit and improve articles by restructuring sections, improving clarity, and tightening prose.
 
   ```
