@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Basic electronics search",
+    "query": "Search Amazon for CTS 500k guitar pots",
+    "files": [],
+    "expected_behavior": [
+      "Uses Chrome DevTools MCP to navigate to Amazon",
+      "Takes snapshot and reads product data from the accessibility tree",
+      "Extracts ASINs paired with product names from the same container elements",
+      "Presents products with clean amazon.com/dp/[ASIN] URLs"
+    ]
+  },
+  {
+    "name": "ASIN extraction accuracy",
+    "query": "Extract product data from snapshot",
+    "files": ["test-snapshot.txt"],
+    "expected_behavior": [
+      "Extracts exactly 10-character ASINs",
+      "Never fabricates or hallucinates ASINs",
+      "Handles /dp/, /gp/product/, and amzn.to/ URL formats",
+      "Pairs ASINs with product names from the same container element",
+      "Provides clean amazon.com/dp/[ASIN] links"
+    ]
+  },
+  {
+    "name": "Error recovery",
+    "query": "Handle CAPTCHA or rate limit",
+    "files": ["captcha-snapshot.txt"],
+    "expected_behavior": [
+      "Recognizes CAPTCHA in snapshot",
+      "Waits 60 seconds before retry",
+      "Informs user about rate limiting",
+      "Does not fabricate data to mask error"
+    ]
+  },
+  {
+    "name": "Domain explicit - skip the question",
+    "query": "Search Amazon France for a Bluetooth speaker under 50€",
+    "files": [],
+    "expected_behavior": [
+      "Detects 'Amazon France' and the € currency hint",
+      "Does NOT ask the user which Amazon domain to use",
+      "Uses amazon.fr for all search and product page URLs",
+      "Proceeds directly to requirements gathering (Step 1)",
+      "Output URLs use https://www.amazon.fr/dp/[ASIN] format"
+    ]
+  },
+  {
+    "name": "Domain ambiguous - must ask",
+    "query": "Find me wireless headphones on Amazon",
+    "files": [],
+    "expected_behavior": [
+      "Recognizes the request is ambiguous about marketplace",
+      "Uses AskUserQuestion to present the closed list of supported domains",
+      "Does NOT default silently to amazon.com",
+      "Waits for the answer before proceeding to requirements gathering",
+      "Once chosen, uses that domain consistently for all URLs"
+    ]
+  }
+]
