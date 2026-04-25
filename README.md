@@ -38,6 +38,7 @@ npx skills@latest list arkan/skills
 | [`design-an-interface`](./design-an-interface) | Generate multiple radically different interface designs for a module via parallel sub-agents |
 | [`request-refactor-plan`](./request-refactor-plan) | Create a refactor plan with tiny commits, filed as a GitHub issue |
 | [`ubiquitous-language`](./ubiquitous-language) | Extract a DDD ubiquitous-language glossary from a conversation, flagging ambiguities |
+| [`zoom-out`](./zoom-out) | Step back to give broader context or a higher-level perspective on a section of code |
 
 ### Development & code quality
 
