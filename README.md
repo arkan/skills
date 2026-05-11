@@ -35,6 +35,8 @@ npx skills@latest list arkan/skills
 | [`prd-to-plan`](./prd-to-plan) | Turn a PRD into a multi-phase implementation plan using tracer-bullet vertical slices |
 | [`prd-to-issues`](./prd-to-issues) | Break a PRD into independently grabbable GitHub issues |
 | [`grill-me`](./grill-me) | Get relentlessly interviewed about a plan or design until every branch is resolved |
+| [`grill-with-docs`](./grill-with-docs) | Challenge a plan against existing domain documentation, sharpen terminology, and update CONTEXT/ADR docs |
+| [`perfect-it`](./perfect-it) | Stress-test a strategy, plan, design, or architecture until every material loophole is fixed or explicitly blocked |
 | [`design-an-interface`](./design-an-interface) | Generate multiple radically different interface designs for a module via parallel sub-agents |
 | [`request-refactor-plan`](./request-refactor-plan) | Create a refactor plan with tiny commits, filed as a GitHub issue |
 | [`ubiquitous-language`](./ubiquitous-language) | Extract a DDD ubiquitous-language glossary from a conversation, flagging ambiguities |
@@ -50,6 +52,8 @@ npx skills@latest list arkan/skills
 | [`qa`](./qa) | Interactive QA session — user reports bugs conversationally, agent files them as issues |
 | [`github-triage`](./github-triage) | Triage GitHub issues through a label-based state machine with grilling sessions |
 | [`improve-codebase-architecture`](./improve-codebase-architecture) | Find architectural improvements — deepen shallow modules, improve testability |
+| [`codemap`](./codemap) | Generate comprehensive hierarchical codemaps for unfamiliar repositories |
+| [`simplify`](./simplify) | Simplify code for clarity, readability, and maintainability without changing behavior |
 | [`migrate-to-shoehorn`](./migrate-to-shoehorn) | Migrate test files from `as` assertions to `@total-typescript/shoehorn` |
 | [`scaffold-exercises`](./scaffold-exercises) | Create exercise directory structures (sections, problems, solutions, explainers) |
 
@@ -77,3 +81,12 @@ npx skills@latest list arkan/skills
 | [`setup-pre-commit`](./setup-pre-commit) | Set up Husky + lint-staged with Prettier, type checking, and tests |
 | [`git-guardrails-claude-code`](./git-guardrails-claude-code) | Add Claude Code hooks that block dangerous git commands before they execute |
 | [`write-a-skill`](./write-a-skill) | Create new agent skills with proper structure, progressive disclosure, and bundled resources |
+
+## Available commands
+
+Slash commands live in [`commands/`](./commands) and can be used by clients that support repository-provided commands.
+
+| Command | Role |
+|---|---|
+| [`/crit`](./commands/crit.md) | Review code changes or a plan with `crit` inline comments |
+| [`/loop`](./commands/loop.md) | Run one autonomous loop iteration toward a durable goal |
