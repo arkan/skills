@@ -23,6 +23,7 @@ Thumbs.db
 
 # Research output (kept local)
 *.json
+!schemas/*.json
 
 # Test output
 .pytest_cache/
