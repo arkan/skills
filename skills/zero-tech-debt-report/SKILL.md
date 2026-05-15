@@ -131,6 +131,30 @@ The report should include:
 - Use Mermaid diagrams inside the HTML report to explain current vs proposed architecture, flow, or state transitions.
 - Prefer simple diagrams over exhaustive ones.
 - Every diagram must support a decision in the report.
+- Quote Mermaid node labels by default, especially labels that contain routes, API paths, URLs, method names, punctuation, or placeholders.
+  - Use `NodeId["POST /users/{username}/reset-password"]`.
+  - Do not use `NodeId[POST /users/{username}/reset-password]`.
+- Treat the following characters as requiring quoted labels in Mermaid: `{}`, `()`, `[]`, `/`, `#`, `:`, `?`, `&`, `.`, `+`, `-`, and backticks.
+- Do not place route placeholders such as `{id}` or `{username}` unquoted inside labels. Mermaid parses `{` as diagram syntax, not plain text.
+- Prefer stable ASCII node IDs (`RequestReset`, `AdminRoute`, `TokenStore`) and put human-readable text only in quoted labels.
+
+## Mermaid verification
+
+HTML parsing is not enough. Before reporting success:
+
+1. Extract every `<pre class="mermaid">...</pre>` block from the generated HTML.
+2. Parse each block with Mermaid using the same major version loaded by the report.
+3. If any block fails, fix the diagram before returning.
+4. A report is not valid if Mermaid renders `Syntax error in text`.
+
+Useful validation pattern:
+
+```js
+const blocks = [...html.matchAll(/<pre class="mermaid">([\s\S]*?)<\/pre>/g)].map((match) => match[1]);
+for (const block of blocks) {
+  await mermaid.parse(block);
+}
+```
 
 ## Complexity budget
 
