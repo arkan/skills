@@ -155,6 +155,13 @@ All sections must follow the selected language consistently, including:
 
 Generate a self-contained HTML report that explains the proposed zero-tech-debt rework.
 
+Match the report language to the primary language used in the current session conversation.
+If the conversation is in French, write the report in French; if it is in English, write it in English; apply the same rule for other languages.
+If multiple languages appear, use the user's latest task/request language unless the user explicitly asks for a different report language.
+Keep code identifiers, file paths, commands, API names, external quotes, and Mermaid node IDs unchanged.
+Translate human-readable report content, including headings, prose, bullets, risk labels, checklist items, scorecard labels, and Mermaid labels when they are not code-like identifiers.
+Set the HTML `lang` attribute when the target language can be inferred.
+
 The report should include:
 
 # 1. Executive summary
