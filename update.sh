@@ -6,25 +6,46 @@ TMP="$(mktemp -d)"
 
 trap 'rm -rf "$TMP"' EXIT
 
+checkout_path() {
+  local repo="$1"
+  local ref="$2"
+  local key="${repo}_${ref}"
+
+  key="${key//[^A-Za-z0-9._-]/_}"
+
+  printf '%s/%s' "$TMP" "$key"
+}
+
+ensure_checkout() {
+  local repo="$1"
+  local ref="$2"
+  local checkout
+
+  checkout="$(checkout_path "$repo" "$ref")"
+
+  if [[ ! -d "$checkout/.git" ]]; then
+    git clone \
+      --depth 1 \
+      --filter=blob:none \
+      --sparse \
+      --branch "$ref" \
+      "$repo" \
+      "$checkout"
+  fi
+
+  printf '%s' "$checkout"
+}
+
 sync_skill() {
   local repo="$1"
   local ref="$2"
   local source_path="$3"
   local dest_path="$4"
+  local checkout
 
-  local checkout="$TMP/repo"
+  checkout="$(ensure_checkout "$repo" "$ref")"
 
-  rm -rf "$checkout"
-
-  git clone \
-    --depth 1 \
-    --filter=blob:none \
-    --sparse \
-    --branch "$ref" \
-    "$repo" \
-    "$checkout"
-
-  git -C "$checkout" sparse-checkout set "$source_path"
+  git -C "$checkout" sparse-checkout add "$source_path"
 
   mkdir -p "$ROOT/$dest_path"
 
@@ -47,4 +68,3 @@ sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/gr
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/handoff" "skills/handoff"
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/write-a-skill" "skills/write-a-skill"
 sync_skill "git@github.com:199-biotechnologies/claude-deep-research-skill.git" "main" "." "skills/deep-research"
-
