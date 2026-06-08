@@ -67,4 +67,5 @@ sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/zoo
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/grill-me" "skills/grill-me"
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/handoff" "skills/handoff"
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/write-a-skill" "skills/write-a-skill"
+sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/teach" "skills/teach"
 sync_skill "git@github.com:199-biotechnologies/claude-deep-research-skill.git" "main" "." "skills/deep-research"
