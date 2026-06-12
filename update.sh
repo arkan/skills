@@ -69,3 +69,4 @@ sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/ha
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/write-a-skill" "skills/write-a-skill"
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/teach" "skills/teach"
 sync_skill "git@github.com:199-biotechnologies/claude-deep-research-skill.git" "main" "." "skills/deep-research"
+sync_skill "git@github.com:AbdoKnbGit/opencode-simplify.git" "main" "simplify" "skills/simplify"
