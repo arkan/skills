@@ -70,3 +70,6 @@ sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/wr
 sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/teach" "skills/teach"
 sync_skill "git@github.com:199-biotechnologies/claude-deep-research-skill.git" "main" "." "skills/deep-research"
 sync_skill "git@github.com:AbdoKnbGit/opencode-simplify.git" "main" "simplify" "skills/simplify"
+
+mkdir -p skills/pencil-design
+curl -Lsf -o  skills/pencil-design/SKILL.md https://unpkg.com/@pencil.dev/cli@latest/SKILL.md 
