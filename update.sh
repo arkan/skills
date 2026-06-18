@@ -26,8 +26,6 @@ ensure_checkout() {
   if [[ ! -d "$checkout/.git" ]]; then
     git clone \
       --depth 1 \
-      --filter=blob:none \
-      --sparse \
       --branch "$ref" \
       "$repo" \
       "$checkout"
@@ -44,8 +42,6 @@ sync_skill() {
   local checkout
 
   checkout="$(ensure_checkout "$repo" "$ref")"
-
-  git -C "$checkout" sparse-checkout add "$source_path"
 
   mkdir -p "$ROOT/$dest_path"
 
@@ -85,6 +81,10 @@ sync_skill "git@github.com:AbdoKnbGit/opencode-simplify.git" "main" "simplify" "
 sync_skill "git@github.com:plannotator/effective-html.git" "main" "skills/html-diagram" "skills/html-diagram"
 sync_skill "git@github.com:plannotator/effective-html.git" "main" "skills/html-plan" "skills/html-plan"
 sync_skill "git@github.com:plannotator/effective-html.git" "main" "skills/html" "skills/html"
+
+sync_skill "git@github.com:Magdoub/claude-wireframe-skill.git" "main" "." "skills/wireframe"
+sync_skill "git@github.com:elifsue/wireframe-prototyper-skill.git" "main" "." "skills/wireframe-prototyper-skill"
+
 
 mkdir -p skills/pencil-design
 curl -Lsf -o  skills/pencil-design/SKILL.md https://unpkg.com/@pencil.dev/cli@latest/SKILL.md 
