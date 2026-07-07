@@ -1,0 +1,12 @@
+[document]
+author = ""
+language = "fr"
+template = "internal"
+brand = "neutral"
+toc = false
+section_breaks = "none"
+render_mermaid = true
+reproducible = true
+
+[output]
+directory = "{source_dir}"

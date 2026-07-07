@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120">
+  <rect x="1" y="1" width="358" height="118" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+  <circle cx="70" cy="60" r="28" fill="#eaf2ff" stroke="#64748b"/>
+  <rect x="150" y="32" width="140" height="56" rx="6" fill="#ffffff" stroke="#64748b"/>
+  <path d="M98 60h44" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="70" y="65" text-anchor="middle" font-family="Arial" font-size="14" fill="#111827">MD</text>
+  <text x="220" y="65" text-anchor="middle" font-family="Arial" font-size="14" fill="#111827">PDF</text>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0l8 4-8 4z" fill="#475569"/>
+    </marker>
+  </defs>
+</svg>
