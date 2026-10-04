@@ -2,6 +2,26 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
+MATT_REPO="https://github.com/mattpocock/skills.git"
+MATT_REF="v1.3.1"
+MATT_COMMIT="24fe0ef7737efae15c87225755e9f6f5965e4888"
+MATT_ONLY=false
+DRY_RUN=false
+
+for option in "$@"; do
+  case "$option" in
+    --matt-only) MATT_ONLY=true ;;
+    --dry-run) DRY_RUN=true ;;
+    --help)
+      printf 'Usage: %s [--matt-only] [--dry-run]\n' "$0"
+      printf '  --matt-only  Update only the pinned Matt Pocock collection.\n'
+      printf '  --dry-run    Show file changes without modifying the repository.\n'
+      exit 0
+      ;;
+    *) printf 'Unknown option: %s\n' "$option" >&2; exit 1 ;;
+  esac
+done
+
 TMP="$(mktemp -d)"
 
 trap 'rm -rf "$TMP"' EXIT
@@ -28,10 +48,28 @@ ensure_checkout() {
       --depth 1 \
       --branch "$ref" \
       "$repo" \
-      "$checkout"
+      "$checkout" >&2
   fi
 
   printf '%s' "$checkout"
+}
+
+sync_directory() {
+  local source="$1"
+  local destination="$2"
+  local options=(-a --exclude '.git')
+
+  if [[ "${3:-true}" == true ]]; then
+    options+=(--delete)
+  fi
+
+  if "$DRY_RUN"; then
+    options+=(--dry-run --itemize-changes)
+  else
+    mkdir -p "$destination"
+  fi
+
+  rsync "${options[@]}" "$source/" "$destination/"
 }
 
 sync_skill() {
@@ -43,33 +81,53 @@ sync_skill() {
 
   checkout="$(ensure_checkout "$repo" "$ref")"
 
-  mkdir -p "$ROOT/$dest_path"
-
-  rsync -a --delete \
-    --exclude '.git' \
-    "$checkout/$source_path/" \
-    "$ROOT/$dest_path/"
+  sync_directory "$checkout/$source_path" "$ROOT/$dest_path"
 }
 
-# Mattpocock 
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/grill-with-docs" "skills/grill-with-docs"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/improve-codebase-architecture" "skills/improve-codebase-architecture"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/prototype" "skills/prototype"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/tdd" "skills/tdd"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/to-issues" "skills/to-issues"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/to-prd" "skills/to-prd"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/codebase-design" "skills/codebase-design"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/diagnosing-bugs" "skills/diagnosing-bugs"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/domain-modeling" "skills/domain-modeling"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/implement" "skills/implement"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/resolving-merge-conflicts" "skills/resolving-merge-conflicts"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/engineering/triage" "skills/triage"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/grill-me" "skills/grill-me"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/grilling" "skills/grilling"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/handoff" "skills/handoff"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/writing-great-skills" "skills/writing-great-skills"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/productivity/teach" "skills/teach"
-sync_skill "git@github.com:mattpocock/skills.git" "main" "skills/personal/edit-article" "skills/edit-article"
+# Validate the entire Matt collection before changing any destination.
+MATT_SKILLS=(
+  skills/engineering/grill-with-docs
+  skills/engineering/improve-codebase-architecture
+  skills/engineering/prototype
+  skills/engineering/tdd
+  skills/engineering/to-tickets
+  skills/engineering/to-spec
+  skills/engineering/codebase-design
+  skills/engineering/diagnosing-bugs
+  skills/engineering/domain-modeling
+  skills/engineering/implement
+  skills/engineering/triage
+  skills/productivity/grill-me
+  skills/productivity/grilling
+  skills/productivity/handoff
+  skills/productivity/writing-for-agents
+  skills/productivity/teach
+  skills/engineering/setup-matt-pocock-skills
+  skills/engineering/code-review
+  skills/engineering/pr
+  skills/engineering/retro
+)
+
+matt_checkout="$(ensure_checkout "$MATT_REPO" "$MATT_REF")"
+if [[ "$(git -C "$matt_checkout" rev-parse HEAD)" != "$MATT_COMMIT" ]]; then
+  printf 'Matt Pocock ref %s does not match the pinned commit %s.\n' "$MATT_REF" "$MATT_COMMIT" >&2
+  exit 1
+fi
+
+for source_path in "${MATT_SKILLS[@]}"; do
+  if [[ ! -f "$matt_checkout/$source_path/SKILL.md" ]]; then
+    printf 'Missing Matt Pocock skill source: %s\n' "$source_path" >&2
+    exit 1
+  fi
+done
+
+for source_path in "${MATT_SKILLS[@]}"; do
+  sync_directory "$matt_checkout/$source_path" "$ROOT/skills/${source_path##*/}"
+done
+
+if "$MATT_ONLY"; then
+  exit 0
+fi
 
 # Deep Research 
 sync_skill "git@github.com:199-biotechnologies/claude-deep-research-skill.git" "main" "." "skills/deep-research"
@@ -86,5 +144,6 @@ sync_skill "git@github.com:Magdoub/claude-wireframe-skill.git" "main" "." "skill
 sync_skill "git@github.com:elifsue/wireframe-prototyper-skill.git" "main" "." "skills/wireframe-prototyper-skill"
 
 
-mkdir -p skills/pencil-design
-curl -Lsf -o  skills/pencil-design/SKILL.md https://unpkg.com/@pencil.dev/cli@latest/SKILL.md 
+mkdir -p "$TMP/pencil-design"
+curl -Lsf -o "$TMP/pencil-design/SKILL.md" https://unpkg.com/@pencil.dev/cli@latest/SKILL.md
+sync_directory "$TMP/pencil-design" "$ROOT/skills/pencil-design" false
