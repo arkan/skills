@@ -1,0 +1,5 @@
+interface:
+  display_name: "UI Craft"
+  short_description: "Compose and verify polished frontend interfaces"
+policy:
+  allow_implicit_invocation: true
